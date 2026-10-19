@@ -1,0 +1,345 @@
+Spidflisk Modification
+for Nexuiz 2.3
+by Dresk (dresk@comcast.net)
+
+		CHANGELOG
+--------------------------------------
+	* 6/06/07 - 2:00AM EST
+		- Modified Handicap Damage Logic to Cap Self Damage to 100% if Handicap is greater than 100%
+	* 6/03/07 - 5:58PM EST
+		- Added Player Bleed Below Health (spidflisk_player_BleedBelowHealthLevel)
+			- Player models bleeds when below or equivalent to specified health (default value 50)
+		- Added Additional Ambient Sounds
+		- Switched to Utilize Colored Player Names in Spidflisk Client Scoring
+		- Modified the Visual Style of the Welcome Message
+		- Reduced Nex Damage Further from 125 to 110
+		- Frags, Advanced Scores and more are now stored and restored when leaving and returning spectator
+		- Adjusted Desired Gun Bobbing Speed for 2.3
+	* 6/02/07 - 11:54PM EST
+		- Modified "spidflisk_weapon_RocketLauncher_Trigger_DamageMultiplier" from 0.70 to 0.60
+		- Modified "g_throughfloor" from 1 to 0
+			- NO MORE RADIUS DAMAGE THROUGH WALLS
+			- Significant change, but likely remaining
+		- Removed Tip Display of Rocket Launcher Alt-Fire Detonation
+		- Reduced Display of Reduced Nex Damage from 2 times to 1 time per round
+		- Removed Legacy 2.2.3 Mode
+		- Added 2.3 maps final_rage, reslimed, ruiner to DM map list
+	* 5/31/07 - 3:42PM EST
+		- Added "spidflisk_weapon_RapidWeaponSwitches" with a default value of 2 (3 immediate weapon fires)
+			- Specifies how many times you may switch your weapon and be able to immediately fire your weapon
+			- This allows for Nexuiz 2.2.3 behavior (2.2.3 allowed an infinite amount of switches for immediate refire)
+				- For example : Fire Nex, Switch to Laser, Fire Laser Immediately, Switch to Nex, Fire Nex Immediately
+		- Modified sv_gravity from 875 to 880
+		- Modified sv_maxspeed from 435 to 440
+		- Removed additional Crylink projectile due to base projectile damage increase
+		- Modified sv_maxairspeed from 220 (default) to 240
+		- Modified sv_airaccelerate from 5.5 (default) to 6.0
+	* 5/28/07 - 7:24PM EST
+		- Finished Merging Source with Nexuiz 2.3
+		- Added Pre-Processor Legacy Version Support
+			- For a small period Spidflisk will fully support 2.2.3 clients under 2.3
+				- Extra Grenade Bounce Sounds Disabled
+				- Teleport Sound Played for Spawning Players (will use new spawn sound after legacy is disabled)
+				- Detailed Nex Projectile Aesthetics Customized for legacy clients
+				- Electro Ball Effects Customized for legacy clients
+				- Spidflisk Laser Sight on Guns Feature Properl Support for legacy clients
+		- Suppressed "spidflisk_weapon_UseAdvancedOwnershipMessages" due to Nexuiz 2.3 Supporting Feature
+		- Suppressed "g_spawnsound" reading of Nexuiz 2.3 Logic
+			- Utilize Spidflisk "spidflisk_player_SpawnEffect" CVar Logic
+		- Suppressed "spidflisk_weapon_FixBulletRicochetSounds" due to Nexuiz 2.3 Supporting Feature
+		- Suppressed "spidflisk_client_LimitOneHitSoundPerFrame" due to Nexuiz 2.3 Supporting Feature
+		- Added "spidflisk_item_AlwaysPickupItems" CVar to allow always picking up items
+			- Removes the prevention of item pickup due to having max health / armor / ammo
+		- Added Proper CVar Checking Support for Clients
+			- If Client CVar Values fail checks, stuffcmds are sent to clients
+				- scr_centertime must be >= 4
+				- vid_conwidth must be >= 800
+				- vid_conheight must be >= 600
+		- Added Proper Welcome Message Display Support
+			- Rankings is no longer displayed in the background
+			- Pressing Crouch will toggle display of the Welcome Message for proper Free-Fly mode
+		- Suppressed Removal of Bad "Bleach" map spawnpoint due to Nexuiz 2.3 Bug Fix
+		- Modified Welcome Message CVar-logic to utilize the new cvar_defstring function instead of statically-defined default values
+		- Added Spidflisk Administrator Support through rcon_password
+			- Utilize ClientCommand "SpidfliskAdministratorLogin" with the only parameter being the rcon_password
+			- Example : "cmd SpidfliskAdministratorLogin MyRconPassword"
+			- Administrators control things such as Fun Forms and RawStuffCmdToClient
+			- Administrators also receive aliases to assist with rcon tasks
+		- Adjusted Nex Detailed Projectile to Reflect new Crylink Projectile Model
+		- Modified "spidflisk_jumppad_StuckObjectTriggerCount" Logic to Call the think function of the stuck object if one exists
+			- Allows for electro balls, mortars, etc. to explode when stuck instead of removing
+		- Added "spidflisk_client_DisableVersionNagging" for the small period of my 2.3 deployment and 2.3 unofficially being available
+			- Also useful for future releases in similiar circumstances
+		- Modified g_projectiles_newton_style to be 0 (Quake Style, or pre 2.3 style) for Spidflisk
+			- Spidflisk player velocities are much faster; leaving this on the default value of 2 greatly unbalances the weapons
+	* 5/11/07 - 10:39PM EST
+		- Modified Some Death Messages
+		- Cleaned up Various Code Segments
+	* 5/3/07 - 1:49AM EST
+		- Modified Scoreboard to displays frags as "Score" and include an additional column "Kills"
+		- Modified Intermission Victory Message
+		- Modified Long Jump to utilize CVar (spidflisk_player_LongJumpAnimation_Enabled)
+			- Added Long Jump Glow Trails on Feet Time (spidflisk_player_LongJumpAnimation_GlowTrailsOnFeetTime)
+				- Specifies how long glow trails from the player's feet should exist after a Long Jump is started
+				- Specify 0 to Disable
+	* 5/1/07 - 1:17AM EST
+		- Modified Virtual Console Width and Height to 800x600 (Nexuiz 2.3 will be using this)
+		- Modified Default Special Awards Displayed from 8 to 10
+	* 4/30/07 - 5:50PM EST
+		- Continued to Modularize the Code Further
+			- Hopefully no bugs in doing so
+	* 4/27/07 - 12:56PM EST
+		- Modified some death messages
+		- Added Intermission Show Winning Player (spidflisk_intermission_DisplayWinningPlayer)
+			- Displays the winning player model and fades them away
+		- Cleaned up Intermission Code Some
+		- Added a "Fun Function" System which allows Administrators to change into new forms
+			- Ghost, DeathSpectre, etc.
+	* 4/26/07 - 12:56PM EST
+		- Removed Hagar Scale Reduction (easier to see projectile)
+	* 4/25/07 - 11:48PM EST
+		- Massively Modularized the code more for ease of integration into new Nexuiz code bases
+		- Still more code to modularize in preparation for 2.3
+		- Created a Prototypes file (Dresk_Prototypes.qh)
+	* 4/21/07 - 10:36PM EST
+		- Added Weapon Fix Bullet Ricochet Sounds (spidflisk_weapon_FixBulletRicochetSounds)
+			- Balances chance of 3 ricochet sounds and makes sure one is always played
+		- Limited Only 1 Ricochet Sound to be played from a client per frame (bad shotgun!)
+	* 4/20/07 - 4:19PM EST
+		- Modified Dropped Armor Percentile Addition to Armor Addition Amount (spidflisk_playerdeath_DropArmor_ArmorAdditionAmount)
+			- Percentile addition was just not working out too well
+		- Modified Rocket Alt-Fire Detonation Channel from CHAN_BODY to CHAN_AUTO
+		- Increased Volume of Rocket Alt-Fire Detonation from 0.5 from 1.0
+	* 4/19/07 - 6:16PM EST
+		- Cleaned up Documentation
+		- Changed Existing Feature from forced to CVar (spidflisk_client_LimitOneHitSoundPerFrame)
+			- Disabling this CVar will return to the old method of multiple hitsounds per frame (shotgun)
+		- Added Item Powerup Respawn Global Sounds (spidflisk_item_PowerupGlobalRespawnSounds)
+			- Specifies if, when a powerup respawns, a different sound should be heard globally
+		- Added Weapon Firing Sounds Use Dynamic Channels (spidflisk_weapon_FiringSoundsUseDynamicChannels)
+			- Specifies if firing sounds should NOT overwrite the current firing sound
+	* 4/18/07 - 2:25AM EST
+		- Massively cleaned up codebase to allow for modularity for ease of updates in the future
+			- Multiple actions are now processed in a single function call
+			- Might be some bugs; we'll need to check!
+		- Modified spidflisk_weapon_ExteriorWeaponHasLaserSight to support a value of 2
+			- The value of 2 represents having the laser sight inherit the player colors, instead of the static purple color
+		- Renamed all of the Handicap CVars to have underscores after Handicap
+		- Added Playe Global Colormod Decrement Amount (spidflisk_player_GlobalColormodDecrementAmount)
+			- Decrements the default colormod of all players ('1.0 1.0 1.0') by the specified amount
+			- This works well with EF_FULLBRIGHT players and blooming phasing out too much detail
+			- Default Value is 0.3
+		- Added CVar for Current Behavior of Item Respawn Effect Uses Sparks (spidflisk_item_RespawnEffectUsesSparks)
+			- Sparks do not create any dynamic light sources, which the normal effect does, harming performance
+		- Increased Jump Height Additionally from 350 to 355
+		- Updated Message of the Day to Support Greater Than or Less Than Checks for Integrity of Modified Game Rules
+	* 4/17/07 - 10:35AM EST
+		- Cleaned up code randomly to become modular for easier integration in new Nexuiz releases
+			- Modified codebase to combine modifications into single functions rather than multiple calls within existing function
+				- ie. PostCheckStartItem (handles vertical tilt, if item is in map, original item additive value, spawning additional ambient sound)
+		- Fixed Bug in spidflisk_handicap alias
+	* 4/15/07 - 3:50AM EST
+		- Tweaked Laser Alternate Fire to Inherit Jump Pad Properties
+		- Modified Spawn Point Model Alpha and Particle Display
+		- Added Taunt Animation During Chat (spidflisk_player_TauntAnimationDuringChat)
+		- Reduced Intensity of Chat Bubble Sprite (nicer to bloom users)
+	* 4/13/07 - 8:22PM EST
+		- Added Exterior Weapon Inherits Vertical View Angle (spidflisk_weapon_ExteriorWeaponInheritsOwnerVerticalAngle)
+			- Allows the exterior weapon model to face vertically in the direction that the player is facing
+		- Added Exterior Weapon Has Laser Sight (spidflisk_weapon_ExteriorWeaponHasLaserSight)
+			- Provides a laser sight to assist with knowing where a player is aiming (works well with spidflisk_weapon_ExteriorWeaponInheritsOwnerVerticalAngle)
+		- Added More Blood!
+		- Fixed Bug where Improper CTF Flag Grab Message was Displayed
+	* 4/05/07 - 10:29PM EST
+		- Increased Item Vertical Tilt (from 25 to 30)
+		- Added Electro Reduced Combo Explosion (spidflisk_weapon_Electro_UseReducedComboExplosion)
+			- This new effect massively improves performance when many balls explode in a combo
+		- Modified Extended Effects on Mortars to be just glow trails and EF_FULLBRIGHT
+		- Modified Behavior of Mortar Alternate Fire
+			- Behaves more like Quake1-style Grenades
+			- g_balance_grenadelauncher_secondary_speed 600
+			- g_balance_grenadelauncher_secondary_refire 0.51
+		- Fixed Bug with "You were Fragged by" messages showing negative enemy health (if enemy was dead)
+		- Added "Large Armor" Respawn Time CVar (spidflisk_item_LargeArmor_RespawnTime)
+			- Default Value is 20 (previous respawn time was 30)
+		- Fixed bug where corpses did not gib on telefrag when Corpses Gib Only on Explosives was enabled
+		- Fixed bug where powerup dynamic lights were applied to both player model and exterior weapon model
+			- Not good for performance!
+	* 3/29/07 - 1:44AM EST
+		- Added New Awards
+		- Added More Ambient Sound Spawns
+		- Fixed Create Spawn Point Default Value (should have been 2; was 1)
+		- Modified Exterior Weapon Model to Not Inherit EF_FULLBRIGHT
+		- Added Experimental Holster Angles for View Weapon when Chatting
+	* 3/27/07 - 11:02AM EST
+		- Re-aligned Special Award Description Text to be Right-Aligned
+		- Disabled rendering of first person view weapon at end of Intermission FadeToBlack
+		- Added New Awards
+	* 3/26/07 - 11:16AM EST
+		- Added Intermission Fade to Black (spidflisk_intermission_FadeToBlack)
+			- Quickly fades client views to black for easier reading of text
+		- Shifted Intermission Functions to new file (Dresk_Intermission.qc)
+		- Renamed CVar spidflisk_playerdeath_DroppedPowerupTimeAddition to spidflisk_playerdeath_DropPowerups_PowerupTimeAddition
+		- Added Dropped Armor Percentile Addition (spidflisk_playerdeath_DropArmor_PercentArmorAddition)
+			- Adds specified percentage of dropped armor to dropped armor
+			- Default is 35%
+		- Renamed "Explosive Activist" award to "Explosion Whore"
+	* 3/25/07 - 3:57PM EST
+		- Added Corpse Gib Only on Explosives (spidflisk_playerdeath_CorpseGibOnlyOnExplosives)
+			- Specifies if corpses can only be gibbed by explosives
+			- This also assigns SOLID_NOT to corpses, no longer having them block bullets or projectiles
+		- Re-organized ServerCFGs Files
+			- Game settings now assigned through multiple CFG files
+		- Increased sv_maxspeed from 425 to 435
+		- Increased Handicap Display Timer
+		- Added Players Only Play HitGround Sounds (spidflisk_misc_PlayersOnlyPlayHitGroundSounds)
+			- Specifies if only active players should play HitGround sounds due to physics.  This suppresses the HitGround sounds from playing due to corpses bouncing, gibs bouncing, etc.
+		- Added new Award (Corpse Gibber)
+		- Decreased Awards Displayed to 8
+		- Disabled Uzi Alt-Fire Push for Now (just too awkward; also abused in CTF)
+		- Added Nex Detailed Projectile (spidflisk_weapon_Nex_DetailedProjectileSpeed)
+			- Specifies speed of simple detailed projectile for Nex shots
+	* 3/22/07 - 10:22PM EST
+		- Disabled Players Glow at Intermission for Now (spidflisk_intermission_PlayersGlow)
+		- Increased Awards Displayed to 10 (spidflisk_intermission_AdvancedClientScores_NumberOfAwardsToDisplay)
+		- Modified Viewgun Model to not inherit EF_NODEPTHTEST
+		- Modified CTF Simple Reporting to Report Capture Time in Seconds Only (no decimals)
+		- Modified Chattiest Motherfucker Award to Count Characters Spoken, not just number of times spoken
+		- Added New Awards
+		- Cleaned up Various CTF Messages
+		- Added Advanced Victory Message (spidflisk_intermission_UseAdvancedVictoryMessage)
+		- Added SEX_ROBOT to Model Sexes
+	* 3/16/07 - 5:26PM EST
+		- Created CVar for Mega Health Value (spidflisk_item_MegaHealth_Health)
+		- Modified Logic of Create Spawn Point Models CVar (spidflisk_misc_CreateSpawnPointModels)
+			- 1 uses standard Spawn Point Models
+			- 2 uses full bright models with less alpha (looks better in my opinion)
+		- Added Advanced Weapon Ownership Messages (Tweaked "You don't own that weapon" message) (spidflisk_weapon_UseAdvancedOwnershipMessages)
+			- Provides weapon name attempted to be switched to
+			- Notes if weapon is not available on map
+		- Modified Chat Killing DoucheBag award to be Chat Damaging Douchbag
+			- Accumulates damage to chatting players, not just kills
+	* 3/10/07 - 7:42PM EST
+		- Tweaked Mega Health to Provide 150 Health (instead of 100)
+		- Recoded the Entire Client Score Award System
+			- Now uses arrays for dynamic and modular implementation (read: much easier to update)
+		- Added Additional Special Awards
+		- Added CVar to Specify how many special awards to show at intermission (spidflisk_intermission_AdvancedClientScores_NumberOfAwardsToDisplay)
+			- Default Value is 7; specify -1 to display all
+	* 3/10/07 - 12:49PM EST
+		- Modified Crylink Kill Message
+		- Fixed bug with Mega Health Award Calculation
+		- Remove "is NO LONGER SPECTATING you" message (bugged)
+	* 3/9/07 - 11:30PM EST
+		- Added Additional Feedback to Nex Impact
+		- Added Additional Special Awards
+		- Modified Intermission Glow Color to be Random
+		- Removed Broken Bleach Spawnpoint through Code
+		- Added Dropped Powerup Time Addition (spidflisk_player_DroppedPowerupTimeAddition)
+			- Default Value is 4
+		- Renamed Player Death CVars that were spidflisk_player_ only
+		- Modified Suicide Death Message
+		- Raised Rocket Launcher Trigger Multiplies (Damage : From .65 to .70, Radius : From .80 to .85)
+		- Modified Channel of Weapon Switch Sound to Voice (prevent cutting of weapon fire sound due to weapon switch)
+		- Added Spectate Report Suppression Time (prevents spam of "is SPECTATING you" messages
+	* 2/8/07 - 8:40PM EST
+		- Added Detailed Projectile Spawn for Crylink (spidflisk_weapon_Crylink_DetailedProjectileTime)
+			- Cooler looking shoot effect
+			- Projectile is completely non-interactive
+		- Increased Chance of 25 Health Spawning Ambient Sound
+		- Modified Crylink Primary Fire Shorts to Shoot 5 (from 4)
+		- Updated Laser Alternate Fire Graphics
+	* 2/8/07 - 2:30PM EST
+		- Changed Rocket Launcher Alt-Fire Radius Multiplier from 0.65 to 0.80
+		- Modified Player Color Glow at Intermission (darker)
+		- Modified Rocket Launcher Alt-Fire Explosion to use smaller mortar explosion
+		- Modified Special Awards Display Style
+	* 2/8/07 - 12:18AM EST
+		- Added Explosion Types to Rocket Launcher Damage Function
+		- Reduced Damage and Radius of "Triggered" Rocket Explosions (spidflisk_weapon_RocketLauncher_Trigger_DamageMultiplier, spidflisk_weapon_RocketLauncher_Trigger_RadiusMultiplier)
+			- After significant gameplay (more than 200+ hours), I have decided this is fairest
+			- Currently Triggered Explosions have 65% Damage and 65% Radius
+		- Cleaned up Help Text Functions and Variables
+		- Changed "Armor Stable" Value from 100 to 150 (how much armor you can accumulate before it decreases)
+		- Redesigned Welcome Message Text Slightly
+		- Added New Hagar Explosion (spidflisk_weapon_Hagar_UseModifiedExplosion)
+			- Purple, much smaller, easy to see through
+		- Added "Special Awards" to Client Scoring
+		- Added Intermission Players Glow (spidflisk_intermission_PlayersGlow)
+	* 1/26/07 - 6:36PM EST
+		- Fixed some verbiage mistakes
+		- Utilizing new alias "chspeed" for stuffcmds when sending cl_*speed CVars
+		- Modified Spectator Display (includes ping and handicap, new colors)
+		- Fixed bug with Bots Joining and Wrong Client Stat Begin Time
+	* 1/21/07 - 3:09PM EST
+		- Merged source with Nexuiz 2.2.3
+		- Dropped Weapons Now Have Vertical Tilt Applied
+		- Tweaked Viewmodel to Inherit All Owner Effects EXCEPT EF_FULLBRIGHT
+		- Forcing "LongJump" Animation on Any Jumppads Now
+		- HitSound Stuffcmds are only sent ONCE per frame now (prevent LOUD shotgun hitsound feedback, amongst other things)
+	* 1/21/07 - 1:37PM EST
+		- Hopefully fixed issue with bots inheriting Client Stats Scoreboard values
+		- Added "No Longer Spectating" to Spectating Reports
+		- Fixed bug where spectating message was sent even when spectating the same target over and over
+		- Only display frags on disconnect if not spectator
+	* 1/20/07 - 7:01PM EST
+		- Modified Default Handicap Minimum and Maximum (10 and 200, respectively)
+		- Shifted "Jump to Play", "Attack to Spectate" etc. message to #defines
+			- Additionally colorized them
+		- Added Handicap Display to Spectating Message
+		- Added Report Spectate to Client (spidflisk_client_ReportSpectateToClient)
+			- Prints Message to Client when Spectated by a player
+			- 1 uses sprint, 2 uses centerprint
+		- Returned to displaying "is spectating now"
+			- Modified Message and Provide Sound
+		- Modified new Minimum Centerprint Time to 4 (from 3)
+		- Fixed Client Stats Scoreboard Length Printing Issues
+			- Now Culls Strings that are too long for Row
+		- Fixed bug where Client Stats Scores were not reset when switching to spectator
+		- Updated Rocket Alt-Fire Tip Displays to 1 (newbies still don't know about it)
+		- Added Time to Client Stats Scoreboard
+		- Fixed Uzi Exploit Where Fire and Alt-Fire Combined would provide MASSIVE pushing
+	* 1/10/07 - 10:00PM EST
+		- Added More Ambient Sound Spawns
+		- Modified Welcome Message to Display Server Hostname
+	* 1/08/07 - 8:38PM EST
+		- Spawnpoints now created in Domination Gamemode
+	* 1/07/07 - 5:20PM EST
+		- Updated NoDepthTest Flags to Apply to Flag Carrier
+			- Fixes bug where flag attached to carrier did not render due to NoDepthTest not applying
+		- Updated Nex Damage Help Message (proper normal damage is 140)
+		- Cleaned up Welcome Message System
+			- Now Outputs Modified Game Rule ONLY if Modified from Default (useful for div0's server)
+		- Removed Low Bandwidth Suppression of func_bobbing and func_rotating entities
+		- Added New CVars to control Detail Level of func_bobbing and func_rotating entities
+			- Level 2 spawns entity and allows it to move; Level 1 spawns entity but prevents movement; Level 0 suppresses spawning of entity
+			- spidflisk_world_EntityDetailLevel_Bobbing, spidflisk_world_EntityDetailLevel_Rotating
+		- Cleaned up Documentation (shifted features, organized CVars, modified definitions)
+		- Added Color Text to CTF Capture Time Messages
+		- Modified Uzi Alternate Fire Push to NOT Occur if Crouching
+	* 1/02/07 - 10:42PM EST
+		- Added Proper Verbiage for Model Sex (Male, Female, Other)
+			- Applies to death messages
+		- Added Suicide-Specific Messages for All Guns
+	* 1/01/07 - 3:15AM EST
+		- Updated Modification to Nexuiz 2.2.2
+	* 12/23/06 - 1:50PM EST
+		- Fixed bug where Favorite Weapon Calculation Included Damage done to Self
+		- Fixed bug where Favorite Weapon Calculation Included Damage done to Nonplayers (items, etc)
+	* 12/22/06 - 8:00PM EST
+		- Added Nex Prevent Immediate Velocity Damage Time
+			- Allows for a time to be set to prevent any damage based on velocity (falling) after being hit by the Nex
+		- Added Suppression Time to Help Text Message Displays (default 5 seconds)
+		- Modified Origin of Shotgun View Model
+			- Looks better; new origin is '10 5 0'
+		- Added Colors to SPIDFLISK FEATURE Display Text
+		- Modified te_blood calls to be te_bloodshower
+			- Capped bloodshower maximum amount to 1000 (bad suicides!)
+		- Changed Hitsound stuffcmd to alias ("alias hsnd play2 misc/hit.wav\n")
+			- Alias sent at client connect
+			- Allows for client to configure hitsound 
+		- Added New Spidflisk Client Scoring System
+			- Much more detailed display of scores at end of match
+		- Updated Spidflisk Version to 0.9
+		- Started Changelog
+			- Playing catch up on a few features here

@@ -1,0 +1,110 @@
+// DRESK - Function Prototypes
+
+// --------------------------------------------------
+// Nexuiz Prototypes
+
+// Items
+	void StartItem (string itemmodel, string pickupsound, float defaultrespawntime, string itemname, float itemid, float itemflags, float(entity player, entity item) pickupevalfunc, float pickupbasevalue);
+	float commodity_pickupevalfunc (entity player, entity item);
+	void minstagib_items (float itemid);
+	float generic_pickupevalfunc(entity player, entity item);
+	void item_health25(void);
+	void item_armor25(void);
+	// External Variables
+		.float max_armorvalue;
+	
+// Damage
+	void Damage (entity targ, entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force);
+	
+// Weapons
+	void W_SetupShot(entity ent, vector vecs, float antilag, float recoil, string snd);
+	void RadiusDamage(entity inflictor, entity attacker, float coredamage, float edgedamage, float rad, entity ignore, float forceintensity, float deathtype);
+	float weapon_prepareattack(float secondary, float attacktime);
+	void W_SwitchWeapon(float imp);
+	void weapon_thinkf(float fr, float t, void() func);
+	// External Variables
+		vector w_shotorg;
+		vector w_shotdir;
+		
+		float WFRAME_FIRE1;
+		float WFRAME_FIRE2;
+		float WFRAME_IDLE;
+// Players
+		$frame die1 die2 draw duck duckwalk duckjump duckidle idle
+		$frame jump pain1 pain2 shoot taunt run runbackwards
+		$frame strafeleft straferight dead1 dead2 forwardright
+		$frame forwardleft backright backleft
+		
+// Bots
+	// External Variables
+		.float bot_dodge;
+		.float bot_dodgerating;
+	
+// Gibs
+	void TossGib (entity gib, string mdlname, vector org, vector v, float destroyontouch);
+	void GibDamage (entity inflictor, entity attacker, float damage, float deathtype, vector hitloc, vector force);
+
+// Subs
+	void SUB_Null();
+	void SUB_SetFade(entity ent, float when, float fadetime);
+	void SUB_Remove(void);
+	vector findbetterlocation(vector org, float mindist);
+
+// --------------------------------------------------
+// Spidflisk Prototypes
+
+// Player Models
+	float GetIsClientDresk(entity enClient);
+	void CheckReservedDreskAesthetic(entity enClient);
+	float GetPlayerModelSex(entity enPlayer);
+	string GetPlayerModelSexVerbiage(entity enPlayer, string strBaseMaleString);
+	string GetRandomPlayerModelString();
+	
+// Player
+	.float bIgnoreDamage;
+	.float bDisableWeaponActions;
+	.void() fpWeaponActionFunction;
+	
+	// Additional CVars
+	.float cvar_vid_conwidth;
+	.float cvar_vid_conheight;
+	
+// Welcome Message
+	.float bHideWelcomeMessage;
+	
+// Successive Centerprinting
+	void SuccessiveCenterprint(entity enReceiver, string strMessage);
+	
+// Death Types
+	float DEATH_DEATHSPECTRETOUCH				= 10015;
+	float DEATH_DEATHSPECTREFLAMINGSKULL		= 10016;
+	
+// Misc
+	float GetClientIsAdministrator(entity enClient);
+	
+// Items
+	void SpawnThrownArmor(vector vOrigin);
+	void SpawnThrownPowerups(vector vOrigin);
+	
+	.float bCannotTouchItems;
+	
+// Fun Functions
+	void FunFunction_SendFunFunctionAliases(entity enClient);
+	.float FunFunc_nPlayerForm;
+
+// Weapons
+	// Detailed Projectiles
+		void DetailedProjectile_Explode(void);
+		void DetailedProjectile_Nex(entity enOwner, float fSpeed, vector vOrigin, vector vEndOrigin, vector vDirection);
+		void DetailedProjectile_Crylink(entity enOwner, float fTime, vector vOrigin, vector vDirection);
+		
+	.float tSpecialWeaponActionAttackTime;
+		
+	// Exterior Weapon Laser
+		.entity enExteriorWeaponLaser;
+		
+	// Nex
+		void CheckNexSetupShotCustomizations(entity enClient);
+		
+	// Crylink
+		void CheckCrylinkDetailedProjectile(entity enClient);

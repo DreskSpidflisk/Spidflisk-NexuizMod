@@ -1,0 +1,545 @@
+Spidflisk Modification
+for Nexuiz 2.3
+by Dresk (dresk@comcast.net)
+
+1.0		OVERVIEW
+--------------------------------------
+	The Spidlisk Modificaton is a modification for the free, opensource first-person-shooter Nexuiz.  The goal of the Spidflisk modification is to accelerate the already fast gameplay of Nexuiz, along with implement many graphical tweaks, offer more robust feedback, tweak weapons and, importantly still, reduce the bandwidth requirements of hosting a Nexuiz server.
+	
+1.1		REQUIREMENTS
+--------------------------------------
+	This modification requires the latest version of Nexuiz (2.3).  For compiling the modification, FTEQCC is required.
+	
+1.2		NOTES
+--------------------------------------
+	It is very likely that I have missed some of my modifications, or have not explained everything in full detail.  Please do not assume this document is the end-all, be-all of my modification.
+	
+	The latest version of this documentation should be available at the following location.
+	http://www.k6plus.com/dresk/Nexuiz/SpidfliskMod/
+	
+2.0		FEATURES
+--------------------------------------
+	The features are broken down into categories reflecting their properties.
+
+2.1		FEATURES - CLIENT
+--------------------------------------
+	FEATURE : Dynamic Server-Side "Successive Centerprint" System
+		DESCRIPTION	: To solve the issue of only one centerprint being displayed to a client at a single time, the server now keeps track of the last centerprint and, if another centerprint is issued prior to the previous fading, the centerprints are stringed together.  NOTE: You must directly call the "SuccessiveCenterprint" Function to use this feature.
+		CVAR		: N/A
+		
+	FEATURE : Centerprinted HelpText System
+		DESCRIPTION	: A semi-complicated system that centerprints information to clients, including standard game tips, Spidflisk features and more.
+			TIP : Rocket Alternate Fire Detonate
+			TIP : BunnyHop Explanation
+			SPIDFLISK FEATURE : Crouch Rate-of-Fire Reduction
+			SPIDFLISK FEATURE : Nexus Damage Reduction
+			SPIDFLISK FEATURE : Laser Alternate Fire
+			SPIDFLISK FEATURE : Electro New Alternate Fire
+			SPIDFLISK FEATURE : Uzi Alternate Fire Push
+			SPIDFLISK FEATURE : Jumppad Convert Fly to Bounce
+			etc...
+		CVAR		: N/A
+		
+	** SUPPRESSED DUE TO NEXUIZ 2.3 IMPLEMENTING / SUPPORTING FEATURE **
+		FEATURE : Multiple Hit Sounds Occuring in One Frame Reduced to One Sound
+			DESCRIPTION	: To avoid the very LOUD hit sound coming from shooting people with the shotgun, only hit sound is allowed per a given server frame.
+			CVAR		: spidflisk_client_LimitOneHitSoundPerFrame "1"
+		
+	FEATURE : Hit Sound Sent as Alias
+		DESCRIPTION	: Instead of sending the hit sound stuffcmd as "play2 misc/hit.wav", an alias is sent to the client named "hsnd" which reduces bandwidth and can be changed to modify the hit sound.
+		CVAR		: N/A
+		
+	FEATURE : Hassle Clients named "Player"
+		DESCRIPTION	: Given a client joining with the name "Player" or "NexPlayer", a hassle system is utilized.
+		CVAR		: spidflisk_client_HassleDefaultPlayerName "1"
+		
+		LEVEL	FEATURE
+		---------------------
+		1+		"CHANGE YOUR NAME" is centerprinted for clients as they respawn
+		2+		Player Configuration Menu is immediately displayed on connect
+		
+	FEATURE : Disable Version Nagging
+		DESCRIPTION	: Disables client version nagging if enabled.  This is useful if, for some reason, your server is running a different version than the official Nexuiz version, but you do not wish for clients to be nagged about this.
+		CVAR		: spidflisk_client_DisableVersionNagging "0"
+	
+	FEATURE : Randomize on Default Player Character
+		DESCRIPTION	: Given a client joining with default players colors (0, 0), new random colors are assigned to the client.  If the client also had the default player model (models/players/marine.zym), the player model is randomized.
+		CVAR		: spidflisk_client_RandomizeOnDefaultPlayerCharacter "1"
+		
+	FEATURE : Report Spectate to Client
+		DESCRIPTION	: If enabled, when being spectated by a player, a message is displayed to the client along with a sound.  If the value is 1, the message is sprinted; if the value is 2, the message is centerprinted.
+		CVAR		: spidflisk_client_ReportSpectateToClient "2"
+	
+	FEATURE : Ambient Sound at Client Join
+		DESCRIPTION	: A simple ambient sound (ambient/air.wav) is played to the client when it has joined.
+		CVAR		: N/A
+		
+	FEATURE : Modified Client Game Join / Leaving Messages
+		DESCRIPTION	: Modified the various messages when clients join, begin playing and the like.
+		CVAR		: N/A
+	
+	FEATURE : Client Connect, Join and Disconnect Sounds
+		DESCRIPTION	: Different sounds are played when a client connects, joins or disconnects from the game.
+		CVAR		: N/A
+		
+	FEATURE : Reserved Skin+Model Combination for Dresk
+		DESCRIPTION	: The player model Lurk.zym with skin 0 is only allowed for Dresk.  Checks are performed at client connection and player respawn.
+		CVAR		: N/A
+		
+	FEATURE : Removed Various Textual / Sound Feedback
+		DESCRIPTION	: The following textual feedback messages have been removed :
+			Self-Death ("you killed your own dumb self!")
+			Successive Kills ("has x frags in a row")
+			Environmental-Trigger Death ("Watch your step!")
+			Yoda ("Did Yoda teach you that?"  No, no he fucking didn't.)
+		CVAR		: N/A
+		
+2.2		FEATURES - PLAYER
+--------------------------------------
+	FEATURE : Blood Replaced by Bloodshower
+		DESCRIPTION : Instead of using te_blood calls for being damaged, te_bloodshower calls are now made, increasing the blood level significantly.
+		CVAR		: N/A
+		
+	FEATURE : Player Models have Sexes
+		DESCRIPTION : Using the biography information available through the menus, each player model now has a sex, consisting of the following subset : SEX_MALE, SEX_FEMALE, SEX_ROBOT, SEX_OTHER.
+		CVAR		: N/A
+		
+	FEATURE : Player Bleed Below Health Level
+		DESCRIPTION : Players will consistently bleed when their health is equivalent to or below the specified level.
+		CVAR		: spidflisk_player_BleedBelowHealthLevel "50"
+		
+	FEATURE : Crouching On Ground Rate of Fire Decrease
+		DESCRIPTION : When a player is both crouching and on the ground their universal rate of fire (ROF) is reduced by a percentile (30 by default), providing faster attacking.
+		CVAR		: spidflisk_player_CrouchAttackReductionPercentile "30"
+		
+	FEATURE : "Long-Jump" Animation Support
+		DESCRIPTION	: When a player achieves a specified z velocity (650 default) in the air or hits a jumppad, the $duckjump animation is played.
+		CVAR		: spidflisk_player_LongJumpAnimation_Enabled "1"
+		
+	FEATURE : "Long-Jump" Glow Trails on Feet Time
+		DESCRIPTION	: Specifies the amount of time that glow trails on the player's feet should exist when in a long jump animation.  Specify 0 to disable.
+		CVAR		: spidflisk_player_LongJumpAnimation_GlowTrailsOnFeetTime "0.9"
+		
+	FEATURE : Footstep Sounds for Player Jump
+		DESCRIPTION	: When a player jumps, a footstep sound is played.
+		CVAR		: spidflisk_player_FootstepForJump "1"
+		
+	FEATURE : Player Global Colormod Decrement Amount
+		DESCRIPTION	: Specifies the amount that should be decremented against the default colormod of all players ('1.0 1.0 1.0').  This decrement works excellent with EF_FULLBRIGHT players as it prevents bloom from obscuring too much of the detail, and also allows in general for more detail to be seen.  Not recommended if g_fullbright_players is 0.
+		CVAR		: spidflisk_player_GlobalColormodDecrementAmount "0.3"
+		
+	FEATURE : Taunt Animation During Chat
+		DESCRIPTION	: Specifies if the taunt animation should be played when a player is chatting.
+		CVAR		: spidflisk_player_TauntAnimationDuringChat "1"
+		
+	FEATURE : Player (Re)Spawn Effect
+		DESCRIPTION	: The teleportation effect and sound are played when a player spawns or respawns.
+		CVAR		: spidflisk_player_SpawnEffect "1"
+		
+	FEATURE : Player Handicap System
+		DESCRIPTION	: Provides a handicap system that modifies the player's damage based on the multiple of a player-specified value.  Minimum and Maximum values are configurable, along with a time delay when switching the handicap more than once.
+		CVAR		: spidflisk_player_Handicap_Allow "1", spidflisk_player_Handicap_ChangeTime "30", spidflisk_player_Handicap_ShowAttackerVictimHandicap "1", spidflisk_player_Handicap_Minimum "10", spidflisk_player_Handicap_Maximum "200", spidflisk_player_Handicap_DisplayHelpMessageTime "211"
+		
+	FEATURE : Crouch Speed Reduction Lessened
+		DESCRIPTION	: To better service player crouching, the speed reduction has been reduced by multiplying the output by 0.65
+		CVAR		: N/A
+		
+	FEATURE : Strafe + Forward / Backwards Animations Forced to Strafe Animations
+		DESCRIPTION	: Rather than playing the utterly awkward strafe + forward / backward animations, the standard strafe left or right animations are played.
+		CVAR		: N/A
+		
+	FEATURE : In-Air Crouch Animation Modified from Crouch to Crouchwalk
+		DESCRIPTION	: Instead of utilizing the $duck animation when a client is crouching and in the air, $duckwalk is utilized.
+		CVAR		: N/A
+
+2.3		FEATURES - PLAYER DEATH
+--------------------------------------		
+	FEATURE : Corpse Gib Only on Explosives
+		DESCRIPTION	: Specifies if player corpses may only be gibbed using explosives (and telefragging).  This also assigns all corpses to SOLID_NOT, so that they will no longer absorb bullets and projectiles, only radius damage.
+		CVAR		: spidflisk_playerdeath_CorpseGibOnlyOnExplosives "1"
+		
+	FEATURE : Drop Powerups on Player Death
+		DESCRIPTION	: Upon death, if the player had either Strength or "Invincibility", the powerup is dropped and the remaining time is sustained.
+		CVAR		: spidflisk_playerdeath_DropPowerups "1"
+		
+	FEATURE : Dropped Powerup Time Addition
+		DESCRIPTION	: Adds the specified time to the dropped powerup remaining time.
+		CVAR		: spidflisk_playerdeath_DropPowerups_PowerupTimeAddition "4"
+		
+	FEATURE : Drop Armor on Player Death
+		DESCRIPTION : Upon death, if the player had 1 or more armor, the armor is dropped and retains its value.
+		CVAR		: spidflisk_playerdeath_DropArmor "1"
+		
+	FEATURE : Dropped Armor Addition Amount
+		DESCRIPTION : Adds the specified amount of armor to the armor that is being dropped.
+		CVAR		: spidflisk_playerdeath_DropArmor_ArmorAdditionAmount "35"
+		
+	FEATURE : Death Message Verbiage Reflect Player Model Sex
+		DESCRIPTION : Utilizing the feature of player models having a sex, death messages now use the appropriate verbiage (example: "her" instead of "him" for a SEX_FEMALE).
+		CVAR		: N/A
+		
+	FEATURE : Bloody Skull Player Death
+		DESCRIPTION : Gibbed corpses launch a bloody skull straight into the air with a glow trail (humorous).
+		CVAR		: spidflisk_playerdeath_BloodySkullDeath "1"
+		
+	FEATURE : Report Killer Ping, Health / Armor on Death
+		DESCRIPTION	: When killed, the centerprinted message will display the killer's ping and/or health/armor.
+		CVAR		: spidflisk_playerdeath_ShowAttackerPing "1", spidflisk_playerdeath_ShowAttackerHealthArmor "1"
+		
+	FEATURE : Customized Player Death Messages
+		DESCRIPTION	: Many of the death messages have been modified, most importantly to support a unique message for each weapon.
+		CVAR		: N/A
+				
+2.4		FEATURES - CORPSE / GIBS
+--------------------------------------
+	FEATURE : Corpse Bouncing
+		DESCRIPTION	: In my best ode to ragdoll physics, corpses will now bounce for a specified number of times.  In my opinion, this adds an additional layer of visceral feedback to player death.
+		CVAR		: spidflisk_corpse_Bounces "3"
+		
+	FEATURE : Additional Vertical Lift at Player Death
+		DESCRIPTION	: At death, players receive an additional 100 + (random() * 600) for z velocity.  This complements Corpse Bouncing.
+		CVAR		: N/A
+		
+	FEATURE : CVAR-based Corpse Fade Time
+		DESCRIPTION	: Rather than utilize the shorter and less varied corpse fade time, a (longer by default) CVAR is now used.
+		CVAR		: spidflisk_corpse_FadeTime "60"
+		
+	FEATURE : CVAR-based Gib Fade Time
+		DESCRIPTION	: Rather than utilize the longer gib fade time, a (shorter by default) CVAR is now used.
+		CVAR		: spidflisk_gib_FadeTime "7"
+		
+	** SUPPRESSED DUE TO NEXUIZ 2.3 IMPLEMENTING / SUPPORTING FEATURE **
+		FEATURE : Assigned EF_LOWPRECISION to Client and Spawned Corpses
+			DESCRIPTION	: To reduce bandwidth, all corpses have the low precision flag assigned to them.
+			CVAR		: N/A
+		
+	FEATURE : Corpse Gib Damage Increased
+		DESCRIPTION	: The damage required to gib a corpse has been increased to -600.
+		CVAR		: N/A (unlikely; waste of CPU lookup)
+		
+	** SUPPRESSED DUE TO NEXUIZ 2.0 IMPLEMENTING / SUPPORTING FEATURE **
+		FEATURE : Origin for Corpse Gib Sound Modified
+			DESCRIPTION	: Previously, and possibly a bug, the corpse gib sound was played at the "trace_ent" location.  This has been changed to the origin of the corpse.
+			CVAR		: N/A
+		
+	** SUPPRESSED DUE TO NEXUIZ 2.0 IMPLEMENTING / SUPPORTING FEATURE **
+		FEATURE : Assigned EF_LOWPRECISION to Corpse Gibs 
+			DESCRIPTION	: To reduce bandwidth, all corpse gibs have the low precision flag assigned to them.
+			CVAR		: N/A
+		
+2.5		FEATURES - WEAPONS
+--------------------------------------
+	** SUPPRESSED DUE TO NEXUIZ 2.3 IMPLEMENTING / SUPPORTING FEATURE **
+		FEATURE : View Model Weapon Suppresses EF_FULLBRIGHT, EF_RED and EF_BLUE Effects
+			DESCRIPTION : The view model weapon looked terrible when fullbright players were enabled, so the EF_FULLBRIGHT flag is not copied to the view model.  Additionally, powerups caused EF_RED and EF_BLUE to be applied both to the player AND view model, which harmed performance.  This can be confirmed with r_speeds.
+			CVAR		: N/A
+		
+	** SUPPRESSED DUE TO NEXUIZ 2.3 IMPLEMENTING / SUPPORTING FEATURE **
+		FEATURE : Fix Bullet Ricochet Sounds
+			DESCRIPTION : Normally, bullet ricochet sounds use an algorithm that only 30% of the time even a sound is played.  This fix makes a sound always play and balances out the chances of all three sounds playing.
+			CVAR		: spidflisk_weapon_FixBulletRicochetSounds "1"
+			
+	FEATURE : Rapid Weapon Switches
+		DESCRIPTION : Specifies the amount of times a player may fire his current weapon and switch to a new weapon, immediately able to shoot the new weapon following.  This logic allows for pre-Nexuiz 2.3 behavior which allowed for an infinite amount of weapon refires when switching weapons.
+		CVAR		: spidflisk_weapon_RapidWeaponSwitches "2"
+		
+	FEATURE : Weapon Firing Sounds Use Dynamic Channels
+		DESCRIPTION : Specifies if the firing sounds of weapons use dynamic channels, instead of constantly replacing the current firing sound with the new one.  WARNING : Can make the machine gun loud.
+		CVAR		: spidflisk_weapon_FiringSoundsUseDynamicChannels "1"
+		
+	FEATURE : Exterior Weapon Inherits Vertical View Angle
+		DESCRIPTION : Specifies if the exterior weapon model on the client is shifted up and down to match the vertical view of the owner.
+		CVAR		: spidflisk_weapon_ExteriorWeaponInheritsOwnerVerticalAngle "1"
+		
+	FEATURE : Exterior Weapon Has Laser Sight
+		DESCRIPTION : Specifies if the exterior weapon model should have a laser sight, which assists others in knowing where the player is aiming.  If the value is assigned to 2, the laser sight color will be based on the colors of the player.
+		CVAR		: spidflisk_weapon_ExteriorWeaponHasLaserSight "1"
+		
+	** SUPPRESSED DUE TO NEXUIZ 2.3 IMPLEMENTING / SUPPORTING FEATURE **
+		FEATURE : Advanced Ownership Messages
+			DESCRIPTION	: Supplies advanced ownership messages when a client tries to change to a weapon they do not currently have.  The message displays the weapon name, and also displays if the weapon is not available in the current map.
+			CVAR		: spidflisk_weapon_UseAdvancedOwnershipMessages "1"
+
+	FEATURE : Laser Alternate Fire
+		DESCRIPTION	: The Laser weapon now supports an alternate firing mode, which produces a much slower moving projectile with additional damage and radius.
+		CVAR		: spidflisk_weapon_Laser_AllowAltFire "1", spidflisk_weapon_Laser_AltFireSpeedDivisor "7.0", spidflisk_weapon_Laser_AltFireRadiusMultiplier "2.0"
+		
+	** SUPPRESSED DUE TO NEXUIZ 2.2.2 IMPLEMENTING / SUPPORTING FEATURE **
+		FEATURE : Nex Prevent Immediate Velocity Damage Time
+			DESCRIPTION	: Uses the specified number as a timer to prevent any velocity (falling) damage from occuring after being hit by the Nex.  This prevents the odd bug where being hit by the Nex would cause falling damage immediately as well, resulting in "was grounded by" kill messages and additional damage constantly.
+			CVAR		: spidflisk_weapon_Nex_PreventImmediateVelocityDamageTime "0.1"
+		
+	** SUPPRESSED DUE TO NEXUIZ 2.0 IMPLEMENTING / SUPPORTING FEATURE **
+		FEATURE : Electro New Alternate Fire
+			DESCRIPTION	: The Electro weapon now has a new alternate firing mode, which constantly sprays electro balls instead of firing three in delayed succession.  Works well while crouching.
+			CVAR		: spidflisk_weapon_Electro_UseNewAltFire "1"
+			
+	FEATURE : Electro Use Reduced Combo Explosion
+		DESCRIPTION	: Specifies if a reduced graphical effect should be used for the Electro Ball combo explosion.  This effect aims to massively improve performance when many balls explode.
+		CVAR		: spidflisk_weapon_Electro_UseReducedComboExplosion "1"
+			
+	FEATURE : Nex Detailed Projectile Speed
+		DESCRIPTION	: Specifies the speed of a simple detailed projectile to be fired with the Nex tracer.  This projectile is entirely non-interactive.  Use 0 to disable projectile.
+		CVAR		: spidflisk_weapon_Nex_DetailedProjectileSpeed "4000"
+		
+	** DISABLED FOR THE TIME BEING **
+		FEATURE : Uzi Alternate Fire Push
+			DESCRIPTION : The Uzi alternate fire now pushes the player back opposing the direction that it was fired if the player is NOT crouching when it is fired.  Z (vertical) pushback is greatly limited.
+			CVAR		: spidflisk_weapon_Uzi_AltFirePushAmount "0"
+		
+	FEATURE : Use Modified Hagar Explosion
+		DESCRIPTION : Specifies if the explosion of the hagar should be a purple, smaller explosion, which is visibly much easier to see through when firing.
+		CVAR		: spidflisk_weapon_Hagar_UseModifiedExplosion "1"
+		
+	FEATURE : Crylink Detailed Projectile Time
+		DESCRIPTION : Specifies the amount of time a detailed projectile should exist for after firing with the Crylink.  This projectile has no influence on the game; it merely serves as an effect.
+		CVAR		: spidflisk_weapon_Crylink_DetailedProjectileTime "0.1"
+		
+	FEATURE : Additional Nexus Firing Feedback
+		DESCRIPTION	: When firing the Nexus, unless crouching, the player receives significant additional view punching on the y and x axis.
+		CVAR		: N/A
+		
+	FEATURE : Extended Grenade Effects
+		DESCRIPTION	: Primary and Secondary Fire Grenades now inherit a glow trail effects, along with EF_FULLBRIGHT, for easier recognition and tracing.
+		CVAR		: spidflisk_weapon_GrenadeLauncher_ExtendedEffects "1"
+		
+	FEATURE : Rocket Launcher Triggered Explosion Damage and Radius Multiplier
+		DESCRIPTION	: Modifies the damage and radius of a rocket that is exploded due to a "trigger" by its owner (ie. alt-fire).
+		CVAR		: spidflisk_weapon_RocketLauncher_Trigger_DamageMultiplier "0.60", spidflisk_weapon_RocketLauncher_Trigger_RadiusMultiplier "0.85"
+		
+2.6		FEATURES - GAME
+--------------------------------------
+	FEATURE : CTF Global Flag Sounds
+		DESCRIPTION : Akin to Quake games, sounds associated with flag activity play throughout the level.
+		CVAR		: spidflisk_game_ctf_GlobalFlagSounds "1"
+		
+	FEATURE : Updated Flag Capture, Return and Grab Messages
+		DESCRIPTION : Flag messages pertaining to its status have now been updated, displaying the player name involved.
+		CVAR		: N/A
+		
+	FEATURE : CTF No Depth Test Flags
+		DESCRIPTION : Assigns No Depth Testing to the flags, allowing all clients to see the flags even when they are behind walls.  If a player picks up the flag, the player is assigned the No Depth Test flag as well, allowing others to see them in addition to the flag.
+		CVAR		: spidflisk_game_CTF_NoDepthTestFlags "1"
+		
+	FEATURE : CTF Flag Glow Trails
+		DESCRIPTION : CTF Flags leave glowing trails behind during motion.
+		CVAR		: spidflisk_game_ctf_FlagGlowTrails "1"
+		
+	FEATURE : CTF Disable Capture Record Reports
+		DESCRIPTION : Disables the attention-whoring CTF Capture record reports.
+		CVAR		: spidflisk_game_ctf_DisableCaptureRecordReports "1"
+		
+2.7		FEATURES - ITEMS
+--------------------------------------
+	FEATURE : Fade Unavailable Items
+		DESCRIPTION	: Instead of removing unavailable (taken) items from view, they are now faded with additive blending, little alpha (0.12) and a green colormod.
+		CVAR		: spidflisk_item_FadeUnavailableItems "1"
+		
+	FEATURE : Always Pickup Items
+		DESCRIPTION	: A change in Nexuiz 2.3 prevented players from picking up items, including health / armor / ammo, when they had the max amount allowed.  This CVar allows for the old logic to return, having players pickup items no matter the status of their related inventory.
+		CVAR		: spidflisk_item_AlwaysPickupItems "1"
+		
+	FEATURE : Respawn Effect Uses Sparks
+		DESCRIPTION	: Specifies if instead of the standard dynamic light effect that is created by items when they spawn, a simple amount of sparks is instead created, saving considerable performance.
+		CVAR		: spidflisk_item_RespawnEffectUsesSparks "1"
+		
+	** SUPPRESSED DUE TO NEXUIZ 2.3 IMPLEMENTING / SUPPORTING FEATURE **
+		FEATURE : Mega Health - Health
+			DESCRIPTION	: Specifies the amount of health that is provided by the Mega Health.  The default is 150, 50 more than the standard (100).
+			CVAR		: spidflisk_item_MegaHealth_Health "150"
+		
+	FEATURE : Large Armor - Respawn Time
+		DESCRIPTION	: Specifies the respawn time of the "Large Armor" item.
+		CVAR		: spidflisk_item_LargeArmor_RespawnTime "20"
+		
+	FEATURE : Detailed Powerup Pickup Messages
+		DESCRIPTION	: When a player picks up a Strength or "Invincibility" Powerup, a more detailed message is displayed reflecting the effect of the powerup and the duration.  NOTE: Goes hand-in-hand with Powerup Drop Support
+		CVAR		: N/A
+		
+	FEATURE : "GlobalSound" Powerup Pickup Support
+		DESCRIPTION	: Akin to the Quake games, Powerups and the 100 health will play their respective pickup sound throughout the level, effectively letting all clients know a powerup item has been acquired.
+		CVAR		: spidflisk_item_PowerupGlobalPickupSounds "1"
+		
+	FEATURE : "GlobalSound" Powerup Respawn Support
+		DESCRIPTION	: Akin to the Quake games, Powerups and the 100 health will play a specialized sound combination throughout the level, effectively letting all clients know a powerup item has respawned.
+		CVAR		: spidflisk_item_PowerupGlobalRespawnSounds "1"
+		
+	FEATURE : Vertical Tilt Weapons
+		DESCRIPTION	: A small effect that vertically tilts weapons, both dropped and level-based.
+		CVAR		: spidflisk_item_VerticalTiltWeapons "30"
+		
+	FEATURE : Item "Noise" Sound Restricted Play
+		DESCRIPTION	: To save bandwidth, an items "noise" is only played if it has a noise.
+		CVAR		: N/A
+		
+2.8		FEATURES - JUMPPADS
+--------------------------------------
+	FEATURE : Convert "Fly" Entities to "Bounce"
+		DESCRIPTION	: Given an entity with MOVETYPE_FLY triggers a jumppad, the movetype is changed to MOVETYPE_BOUNCE.  This allows for rockets, electro plasma / balls and more to fly in the path that a player would when hitting the jumppad, instead of flying straight.
+		CVAR		: spidflisk_jumppad_ConvertFlyToBounce "1"
+		
+	FEATURE : Player Flash Feedback Effect
+		DESCRIPTION	: A small flash of white light occurs when an entity triggers a jumppad.
+		CVAR		: spidflisk_jumppad_PlayerLightFlash "1"
+		
+	FEATURE : Stuck Entity Removal
+		DESCRIPTION	: Non-essential entities that successively trigger a jumppad (ie. may be stuck) for a configured amount of times are removed.  If the object bounces and has a think function, this function is called instead, allowing for entities such as electro balls or mortars to explode instead of simply being removed.
+		CVAR		: spidflisk_jumppad_StuckObjectTriggerCount "10"
+
+2.9		FEATURES - BOTS
+--------------------------------------
+	FEATURE : Bot Automated Joining Display Timer
+		DESCRIPTION	: Provides a system to modulus the current game time, providing the player count that bots fill at, along with the skill.  Specify 0 to disable feature.
+		CVAR		: spidflisk_bot_DisplayBotsFillTime "133"
+			
+	** SUPPRESSED DUE TO NEXUIZ 2.0 IMPLEMENTING / SUPPORTING FEATURE **
+		FEATURE : Automated Bot Joining and Leaving
+			DESCRIPTION	: The server may automatically add and remove bots based on a desired total (base) player count.  Automated skill is also supported.
+			CVAR		: spidflisk_bot_FillBotsBaseCount "4", spidflisk_bot_FillBotsSkill "2"
+		
+	FEATURE : Appended "[BOT]" to Bot Names
+			DESCRIPTION	: The string "[BOT]" is appended as a prefix to all Bot Names, along with a grey color.
+			CVAR		: N/A
+			
+2.10	FEATURES - INTERMISSION
+--------------------------------------
+	FEATURE : Disable Intermission Music
+		DESCRIPTION	: Specifies if the music played during the intermission should be disabled.
+		CVAR		: spidflisk_intermission_DisableMusic "1"
+		
+	FEATURE : Fade to Black
+		DESCRIPTION	: If enabled, the view of all clients will quickly fade to black during intermission, allowing for easier reading of text and concentration.
+		CVAR		: spidflisk_intermission_FadeToBlack "1"
+		
+	FEATURE : Display Winning Player
+		DESCRIPTION	: If enabled, the winning player model will be displayed during the intermission.
+		CVAR		: spidflisk_intermission_DisplayWinningPlayer "1"
+		
+	FEATURE : Use Advanced Client Scores
+		DESCRIPTION	: If enabled, an advanced display of client scores (including frags, deaths, favorite weapon, etc.) is utilized instead of the standard scoreboard.
+		CVAR		: spidflisk_intermission_UseAdvancedClientScores "1"
+		
+	FEATURE : Advanced Client Scores - Number of Awards to Display
+		DESCRIPTION	: Specifies the number of awards to display during the Advanced Client Scores intermission.  Specify 0 for none, or -1 to display all possible awards.
+		CVAR		: spidflisk_intermission_AdvancedClientScores_NumberOfAwardsToDisplay "10"
+		
+	** DISABLED AND WILL LIKELY BE REMOVED IN THE FUTURE **
+		FEATURE : Players Glow
+			DESCRIPTION	: If enabled, all players will be assigned a glowing light for additional atmosphere during the intermission.
+			CVAR		: spidflisk_intermission_PlayersGlow "0"
+		
+	FEATURE : Advanced Victory Message
+		DESCRIPTION	: If enabled, instead of the standard "MyNameHere wins." message, a custom message is displayed with a random victory phrase and additional statistics.
+		CVAR		: spidflisk_intermission_UseAdvancedVictoryMessage "1"
+		
+2.11	FEATURES - SYSTEM / BACKEND
+--------------------------------------
+	FEATURE : Extensively Redone Client Welcome Message w/Streamlined CVAR Report Support
+		DESCRIPTION	: The Welcome Message for clients now displays the information related to the game, such as Fraglimit and Timelimit.  A simple function provides modified game balance CVARs, along with short explanations.
+		CVAR		: N/A
+		
+	FEATURE : Streamlined Mod-Specific CVAR Preparation System
+		DESCRIPTION	: To streamline the additions of mod-specific CVARs, a simple system is used to register them for both local servers and dedicated servers.
+		CVAR		: N/A
+		
+2.12	FEATURES - MISCELLANEOUS
+--------------------------------------
+	FEATURE : Players Only Play HitGround Sounds
+		DESCRIPTION	: Specifies if only active players should play HitGround sounds due to physics.  This suppresses the HitGround sounds from playing due to corpses bouncing, gibs bouncing, etc.
+		CVAR		: spidflisk_misc_PlayersOnlyPlayHitGroundSounds "1"
+		
+	FEATURE : Removed KillCount Feedback Reports
+		DESCRIPTION	: During client successive kills, reports such as "TRIPLE FRAG" and so on have been removed.
+		CVAR		: spidflisk_misc_RemoveKillCountReports "1"
+		
+	FEATURE : Display Game Settings Timer
+		DESCRIPTION	: Provides a system to modulus the current game time, providing the current fraglimit and timelimit based on the specified time.  Specify 0 to disable feature.
+		CVAR		: spidflisk_misc_DisplayGameSettingsTime "60"
+		
+	FEATURE : Create Spawn Point Models
+		DESCRIPTION : Akin to Quake2's system, spawn points will have graphical models spawned on the ground, showing players where all the spawn points are located.  Team spawn points are colored correctly.  A value of 1 utilizes spawn points that are not full bright and have a decent alpha setting.  A value of 2 utilizes full bright spawn points with less alpha, for easier recognition.
+		CVAR		: spidflisk_misc_CreateSpawnPointModels "2"
+		
+	FEATURE : Additional Ambient Sounds
+		DESCRIPTION : Livens up the maps by assigning ambient sounds to item origins.
+		CVAR		: spidflisk_misc_SpawnAdditionalAmbientSounds "1"
+		
+		ITEM / OBJECT				SOUND
+		-------------------------------------------------------
+		100 Health					ambient/water.ogg
+		Strength					ambient/ambient_07.ogg
+		Weapon - Nex				ambient/sparks.ogg
+		Weapon - Grenade Launcher	ambient/machinerydrone01.ogg
+		Weapon - Rocket Launcher	ambient/machine2.ogg
+		Weapon - Electro			ambient/air.ogg
+		Weapon - Hagar				ambient/machine3.ogg
+		Weapon - Uzi				ambient/fan4.ogg
+		"25" Armor					ambient/machine4.ogg
+		"25" Health					ambient/demonwind01.ogg (40% Chance)
+		Platforms					ambient/machine1.ogg
+		
+	FEATURE : Dynamic Low Bandwidth Server Support
+		DESCRIPTION	: A single CVAR controls the level of bandwidth reduction that occurs throughout the codebase.  This assists both the server AND generic speeds for clients due to significantly reducing the packet rate.  See table below for details.
+		CVAR		: spidflisk_misc_LowBandwidthLevel "3"
+		
+		LEVEL	FEATURE
+		---------------------
+		1+		All Entity Fades Modified to Instantly Disappear (no more alpha fading)
+		1+		All Items have EF_LOWPRECISION
+		1+		Bullet Tracer Entities have EF_LOWPRECISION
+		1+		Electro Balls have EF_LOWPRECISION
+		1+		Grenade Explosion Sprite Suppressed
+		1+		Hagar Explosion Sprite Suppressed
+		1+		Laser Raw WriteByte Effect Suppressed
+		1+		Item Pickup sprints Suppressed
+		1+		Shotgun Smoke Puff Suppressed
+		1+		Uzi Muzzle Flash Suppressed
+		2+		Bullet Tracer Entities Suppressed
+		2+		Reduced corpse gibs by 5
+		3+		Player Damage Gibs (gibs due to damage) Suppressed
+		4+		All Detail Gibs (excluding gibbed player head) Creation Suppressed
+		
+	FEATURE : Suppress BPrints When No Players Or Only Bots
+		DESCRIPTION	: Specifies if a server should suppress all BPrints (broadcast prints, including to server console) if no players are on the server or only bots are on the server.  Useful for server operators who want to monitor their console only when players are present.
+		CVAR		: spidflisk_misc_SuppressBPrintsWhenNoPlayersOrOnlyBots "1"
+		
+2.13	FEATURES - WORLD
+--------------------------------------
+	FEATURE : Entity Detail Level - Bobbing
+		DESCRIPTION	: Specifies the detail level of func_bobbing entities.  Level 2 is full detail, spawning the entities and allowing them to move.  Level 1 spawns the entities but suppresses movement.  Level 0 suppresses spawning of the entity entirely.
+		CVAR		: spidflisk_world_EntityDetailLevel_Bobbing "1"
+		
+	FEATURE : Entity Detail Level - Rotating
+		DESCRIPTION	: Specifies the detail level of func_rotating entities.  Level 2 is full detail, spawning the entities and allowing them to move.  Level 1 spawns the entities but suppresses movement.  Level 0 suppresses spawning of the entity entirely.
+		CVAR		: spidflisk_world_EntityDetailLevel_Rotating "1"
+
+3.0		APPENDIX
+--------------------------------------
+	
+3.1		OFFICIAL NEXUIZ MODIFIED CVARS
+--------------------------------------
+	g_fullbrightplayers 1
+	g_forced_respawn 1
+	g_balance_weaponswitchdelay 0.050
+
+	g_balance_nex_damage 125
+
+	g_balance_grenadelauncher_secondary_speed 600
+	g_balance_grenadelauncher_secondary_refire 0.51
+
+	g_balance_armor_stable 150
+	g_pickup_healthmega 150
+
+	g_balance_grapplehook_speed_fly 3000
+	g_balance_grapplehook_speed_pull 2000
+
+	g_throughfloor 0
+	g_projectiles_newton_style 0
+
+	edgefriction 0
+	sv_gravity 880
+	sv_jumpvelocity 355
+	sv_maxspeed 440
+	sv_friction 3
+
+	sv_allow_shownames 0
